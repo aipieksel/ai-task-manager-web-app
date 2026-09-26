@@ -1,0 +1,66 @@
+{
+  "name": "ai-task-manager-web-app",
+  "version": "1.0.0",
+  "description": "Local-first workspace for planning, coordinating, and verifying AI-assisted software tasks.",
+  "author": "aipieksel",
+  "license": "Apache-2.0",
+  "keywords": [
+    "ai",
+    "task-manager",
+    "local-first",
+    "project-management",
+    "electron",
+    "pwa"
+  ],
+  "type": "module",
+  "main": "electron/main.cjs",
+  "private": true,
+  "scripts": {
+    "build:web": "python3 tooling/scripts/build-deploy.py",
+    "start": "./start-app.sh",
+    "electron:dev": "npm run build:web && electron .",
+    "electron:pack": "npm run build:web && npm run electron:icon && electron-builder --mac dir --config.directories.output=build/release",
+    "electron:dmg": "npm run build:web && npm run electron:icon && electron-builder --mac dmg --config.directories.output=build/release",
+    "electron:icon": "python3 tooling/macos/build-electron-icon.py",
+    "test": "CHROMIUM_EXECUTABLE=\"${CHROMIUM_EXECUTABLE:-/Applications/Chromium.app/Contents/MacOS/Chromium}\" bash tooling/qa/run_all.sh"
+  },
+  "build": {
+    "appId": "com.aipieksel.agenticaiprojectstaskmanager",
+    "productName": "Agentic AI Projects Task Manager",
+    "afterPack": "tooling/scripts/after-pack.cjs",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "dist/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "dist",
+        "to": "dist"
+      },
+      {
+        "from": "src/taskmanager/data/runtime/projects.json",
+        "to": "data/runtime/projects.json"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icons/AgenticAIProjectsTaskManager.icns",
+      "target": [
+        "dir"
+      ],
+      "identity": null
+    },
+    "dmg": {
+      "artifactName": "Agentic-AI-Projects-Task-Manager-${version}-${arch}.dmg"
+    }
+  },
+  "devDependencies": {
+    "electron": "^43.3.0",
+    "electron-builder": "^26.15.3"
+  }
+}

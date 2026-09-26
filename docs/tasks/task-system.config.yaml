@@ -1,0 +1,79 @@
+# Codex task-system configuration
+# This file is user-editable.
+# The generator copies this file only when it is missing and must not overwrite your changes.
+# New task plans snapshot these settings into plan.json.taskSystemConfigSnapshot.
+# Changing this file affects future tasks and materially re-planned tasks, not already-created plans.
+
+schema: codex-task-system-config/v1
+version: 1
+
+planning:
+  # defaultMode options:
+  # - auto: choose Quick Fix, Standard Plan, or Full Robust Plan from task risk.
+  # - quick: prefer Quick Fix Mode when safe; hard exclusions still force Standard/Full.
+  # - standard: always create the normal 12-file plan folder unless the user explicitly overrides.
+  # - full: use the full robust planning path with deeper architecture/rollback/verification detail.
+  defaultMode: standard
+
+  # allowInvocationModeOverride options: true or false.
+  # true lets prompts such as `$plan-task --quick`, `@plan-task --standard`, or `/plan-task --full` override defaultMode.
+  allowInvocationModeOverride: true
+
+  # supportedInvocationModes is informational for agents and validators.
+  supportedInvocationModes: [quick, standard, full]
+
+  # quickModeSafety options:
+  # - quick-mode-cannot-bypass-hard-exclusions: recommended; --quick is refused/escalated when unsafe.
+  quickModeSafety: quick-mode-cannot-bypass-hard-exclusions
+
+codexGoal:
+  # enabled options: true or false.
+  # true: execute-plan uses Codex goal tools when available.
+  # false: execute-plan records the skip and does not call get_goal/create_goal/update_goal.
+  enabled: false
+
+  # requirePlanEndGoal options: true or false.
+  # true keeps a concise Codex End Goal in every approval-ready plan.
+  requirePlanEndGoal: true
+
+  # disabledBehavior options:
+  # - record-disabled-and-skip-goal-tools: recommended when enabled is false.
+  disabledBehavior: record-disabled-and-skip-goal-tools
+
+review:
+  # requireIndependentR1 options: true or false.
+  # true means the executor cannot approve its own implementation.
+  requireIndependentR1: false
+
+  # autoSpawnSubagent options: true or false.
+  # true: executor spawns an independent reviewer when implementation moves to review.
+  # false: executor moves to review and waits for TaskManager/coordinator/user assignment.
+  autoSpawnSubagent: false
+
+  # waitForSpawnedReviewer options: true or false.
+  # true: executor uses the wait tool after spawning the reviewer.
+  # false: executor records the handoff and does not wait.
+  waitForSpawnedReviewer: false
+
+  # whenAutoSpawnDisabled options:
+  # - move-to-review-and-stop
+  # - move-to-review-and-request-assignment
+  whenAutoSpawnDisabled: move-to-review-and-stop
+
+lifecycle:
+  userVerification:
+    # treatAsDoneForAgentWork options: true or false.
+    # true: plans in user-verification count as agent-complete/done for active-work triage.
+    treatAsDoneForAgentWork: true
+
+    # excludeFromActiveAssignment options: true or false.
+    # true: coordinators should not assign executor work just because the plan remains in user-verification.
+    excludeFromActiveAssignment: true
+
+    # requireExplicitFailureToReopen options: true or false.
+    # true: only reopen user-verification work when the user reports failure or requests follow-up/closeout.
+    requireExplicitFailureToReopen: true
+
+    # doNotMarkDirtyBecauseStillInUserVerification options: true or false.
+    # true: agents must not call user-verification plans dirty, stale, blocked, or incomplete solely because you left them there.
+    doNotMarkDirtyBecauseStillInUserVerification: true

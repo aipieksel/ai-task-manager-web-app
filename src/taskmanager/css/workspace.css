@@ -1,0 +1,26 @@
+/* Full-height operational workspace */
+.workspace-page { min-height: 100vh; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+.workspace-toolbar {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(255,255,255,.98);
+  z-index: 10;
+}
+.workspace-heading { min-width: 0; display: flex; align-items: center; gap: 12px; }
+.workspace-heading .back-btn { flex: 0 0 auto; }
+.workspace-heading-copy { min-width: 0; }
+.workspace-heading h1 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 600; letter-spacing: -.025em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workspace-heading p { margin: 1px 0 0; color: var(--muted); font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workspace-body { min-height: 0; flex: 1; display: grid; overflow: hidden; }
+.workspace-pane { min-width: 0; min-height: 0; overflow: auto; }
+.workspace-pane + .workspace-pane { border-left: 1px solid var(--border); }
+.pane-header { position: sticky; top: 0; z-index: 5; padding: 13px 16px; background: rgba(252,252,252,.96); border-bottom: 1px solid var(--border); backdrop-filter: blur(8px); }
+.pane-header strong { display: block; font-size: 12px; font-weight: 500; }
+.pane-header span { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
+.inspector-pane { width: var(--inspector-width); background: var(--surface-raised); }
+

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "product": "Agentic AI Projects Task Manager",
+  "repository": "aipieksel/ai-task-manager-web-app",
+  "historyPolicy": "fresh-sanitized-root",
+  "retained": [
+    "src/taskmanager Task Manager-only production source",
+    "electron Task Manager-only desktop runtime",
+    "tooling build, runtime, automation, and QA",
+    "docs/tasks reusable lifecycle and schema contracts",
+    "documentation public product and engineering contracts",
+    "Apache-2.0 legal and GitHub community files"
+  ],
+  "excluded": [
+    "extension-manager source, routes, APIs, tests, native helpers, research, and history",
+    "live runtime registries, task histories, recordings, models, credentials, caches, and generated operational evidence",
+    "reference mockups, private paths, archives, release artifacts, and previous Git objects"
+  ],
+  "identity": {
+    "electronAppId": "com.aipieksel.agenticaiprojectstaskmanager",
+    "pwaId": "com.aipieksel.agenticaiprojectstaskmanager.pwa",
+    "automaticLegacyMigration": false
+  },
+  "repositoryStatus": "intended-name-only; not published by this cleanup"
+}

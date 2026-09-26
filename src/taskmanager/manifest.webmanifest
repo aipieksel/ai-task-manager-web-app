@@ -1,0 +1,38 @@
+{
+  "name": "Agentic AI Projects Task Manager",
+  "short_name": "Agentic Tasks",
+  "description": "Local-first task-system ledger for generated plans, questions, verification, lessons, and observations.",
+  "id": "com.aipieksel.agenticaiprojectstaskmanager.pwa",
+  "start_url": "./index.html#/",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#f5f5f5",
+  "orientation": "any",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Instruction queue",
+      "short_name": "Queue",
+      "url": "./index.html#/",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Task ledger",
+      "short_name": "Tasks",
+      "url": "./index.html#/tasks",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Decision desk",
+      "short_name": "Questions",
+      "url": "./index.html#/questions",
+      "icons": [{ "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

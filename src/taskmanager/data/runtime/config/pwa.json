@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "app": {
+    "name": "Agentic AI Projects Task Manager",
+    "bundleIdentifier": "com.aipieksel.agenticaiprojectstaskmanager.pwa",
+    "startHash": "#/",
+    "launcherAppPath": "~/Applications/Agentic AI Projects Task Manager.app",
+    "iconSource": "src/taskmanager/assets/icons/icon-512.png"
+  },
+  "server": {
+    "host": "127.0.0.1",
+    "port": 8765,
+    "startCommand": "./start-app.sh"
+  },
+  "browser": {
+    "preferredExecutables": [
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "/Applications/Chromium.app/Contents/MacOS/Chromium",
+      "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+      "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
+    ],
+    "profileDir": "~/Library/Application Support/Agentic AI Projects Task Manager/PWA Browser Profile"
+  },
+  "install": {
+    "pinDock": true,
+    "openAfterInstall": true
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "plan-section.schema.json",
+  "type": "object",
+  "required": [
+    "order",
+    "file",
+    "sectionId",
+    "title",
+    "navLabel",
+    "layout",
+    "ownerRole",
+    "editPolicy"
+  ],
+  "properties": {
+    "order": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+    },
+    "file": {
+      "type": "string",
+      "pattern": "^[0-9]{2}-[a-z0-9-]+\\.md$"
+    },
+    "sectionId": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "navLabel": {
+      "type": "string"
+    },
+    "layout": {
+      "type": "string"
+    },
+    "appendOnly": {
+      "type": "boolean"
+    },
+    "ownerRole": {
+      "enum": [
+        "planner",
+        "executor",
+        "reviewer",
+        "taskmanager",
+        "all"
+      ]
+    },
+    "editPolicy": {
+      "enum": [
+        "frozen-after-approval",
+        "role-owned",
+        "taskmanager-synced",
+        "machine-owned",
+        "append-only"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

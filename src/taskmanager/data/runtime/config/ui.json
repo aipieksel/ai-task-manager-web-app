@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "settings": {},
+  "routes": {
+    "queue": {
+      "customOrder": {
+        "enabledScopes": {
+          "project:qa-project": false
+        },
+        "orders": {
+          "project:qa-project": [
+            "qa-project::server-backed-fixture.md",
+            "qa-project::archive-fixture.md",
+            "qa-project::pending-questions-fixture.md"
+          ]
+        }
+      }
+    },
+    "tasks": {}
+  }
+}

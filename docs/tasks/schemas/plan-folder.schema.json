@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "task-plan-folder.schema.json",
+  "type": "object",
+  "required": [
+    "schema",
+    "planId",
+    "folderName",
+    "title",
+    "slug",
+    "created",
+    "updated",
+    "lifecycle",
+    "planningState",
+    "status",
+    "riskLevel",
+    "planScore",
+    "codexEndGoal",
+    "sections"
+  ],
+  "properties": {
+    "schema": {
+      "const": "task-plan-folder/v1"
+    },
+    "planId": {
+      "type": "string",
+      "pattern": "^[0-9]{5}$"
+    },
+    "folderName": {
+      "type": "string",
+      "pattern": "^[0-9]{5}-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "created": {
+      "type": "string"
+    },
+    "updated": {
+      "type": "string"
+    },
+    "lifecycle": {
+      "enum": [
+        "draft",
+        "pending",
+        "approved",
+        "in-progress",
+        "review",
+        "user-verification",
+        "failed-user-verification",
+        "completed",
+        "archive",
+        "parked",
+        "blocker"
+      ]
+    },
+    "planningState": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "riskLevel": {
+      "type": "string"
+    },
+    "planScore": {
+      "type": "string"
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {
+        "$ref": "plan-section.schema.json"
+      }
+    },
+    "codexEndGoal": {
+      "type": "string",
+      "minLength": 40,
+      "description": "Concise, concrete, outcome-level objective with a clear completion guard that the executor sets with the Codex goal feature; not a copied checklist, minimum-only target, or shortcut target."
+    },
+    "taskSystemConfigSnapshot": {
+      "type": "object",
+      "description": "Snapshot of docs/tasks/task-system.config.json captured when the plan was created so future config changes do not silently change already-created tasks.",
+      "properties": {
+        "schema": {
+          "const": "codex-task-system-config-snapshot/v1"
+        },
+        "source": {
+          "type": "string"
+        },
+        "sourcePath": {
+          "type": "string"
+        },
+        "capturedAt": {
+          "type": "string"
+        },
+        "config": {
+          "type": "object"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "not": {
+    "anyOf": [
+      {
+        "required": [
+          "canonicalFiles"
+        ]
+      },
+      {
+        "required": [
+          "files"
+        ]
+      },
+      {
+        "required": [
+          "sectionFiles"
+        ]
+      }
+    ]
+  },
+  "additionalProperties": true
+}
