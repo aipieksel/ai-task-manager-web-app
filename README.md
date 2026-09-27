@@ -2,9 +2,15 @@
 
 Maintained by [aipieksel](https://github.com/aipieksel). Upstream credits and licenses remain with their respective authors.
 
-An open-source, local-first workspace for planning, coordinating, and verifying AI-assisted software tasks.
+AI Task Manager brings software task plans from your local project folders into one place. It helps you see what is waiting, what an agent is working on, which decisions need an answer, and which completed changes still need verification. The project files remain the source of truth; the app reads and writes the supported Markdown and JSON task records instead of moving them into a hosted account.
 
-It turns Markdown task plans into a focused operational interface for queues, decisions, lifecycle transitions, agent activity, project registries, lessons, observations, and user verification. Your task data stays in project folders you choose; the application has no hosted account requirement and no built-in telemetry.
+Connect one or more projects to view their queues, plans, activity, lessons, and verification. When a new project has no compatible task system, the app offers a copyable setup instruction for a coding agent and checks the resulting files before unlocking the full workspace. It runs as a PWA, a local writable web app, or an unsigned Electron desktop build. There is no built-in telemetry.
+
+## A typical workflow
+
+1. Add a project folder and check whether its `docs/tasks` contract is ready.
+2. Review the queue, answer open planning questions, and follow work through its lifecycle.
+3. Inspect verification evidence and record your own acceptance in the project's task files.
 
 ## What it does
 
@@ -14,8 +20,6 @@ It turns Markdown task plans into a focused operational interface for queues, de
 - Runs as a PWA, a local writable web app, or an unsigned Electron desktop build.
 - Uses isolated public app data under `Agentic AI Projects Task Manager`; it does not import another product’s registry automatically.
 - Works with any coding agent or human workflow that follows the documented task-folder contract.
-
-This project may feel familiar to people who use Notion to organize work, but its scope is narrower: it is a filesystem-backed software-task workspace, not a collaborative document/database suite. It is not affiliated with, endorsed by, or feature-compatible with Notion Labs, Inc., and it does not claim Notion feature parity.
 
 ## See the real workflow
 
@@ -133,7 +137,7 @@ The default desktop/runtime registry begins as `{ "version": 1, "projects": [] }
 
 ## Scope and roadmap
 
-The current release is intentionally a task workspace. Rich collaborative documents, databases, realtime multi-user editing, hosted sync, and general-purpose knowledge pages are outside the current scope. Contributions that deepen reliable task planning, lifecycle coordination, verification, accessibility, portability, and privacy are welcome.
+The app focuses on software-task work. Rich collaborative documents, databases, realtime multi-user editing, hosted sync, and general-purpose knowledge pages are outside its current scope. Contributions that deepen reliable task planning, lifecycle coordination, verification, accessibility, portability, and privacy are welcome.
 
 ## Community and security
 
