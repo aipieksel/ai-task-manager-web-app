@@ -18,6 +18,7 @@ import {
   setProjectData,
 } from '../state/store.js';
 import { normalizePath, stableId } from '../lib/utils.js';
+import { addMemory } from './memory-service.js';
 
 
 const pendingTaskManagerChanges = new Map();
@@ -421,6 +422,23 @@ export async function saveQuestionAnswer(questionUid, optionKey, customText = ''
     detail: result.answer,
   });
   await scanProject(project.id);
+
+  // Store the decision in Mem0 for cross-project recall
+  try {
+    await addMemory(project.id,
+      `User answered planning question in task "${task.title}" ` +
+      `with option: ${customText || option?.text || ''}`,
+      {
+        type: 'decision',
+        task_id: task.id,
+        task_title: task.title,
+        project_name: project.name,
+      }
+    );
+  } catch (e) {
+    console.warn('Mem0 capture failed for question answer:', e.message);
+  }
+
   return result;
 }
 

@@ -24,6 +24,11 @@ from urllib.parse import unquote, urlparse
 from taskmanager_registry import resolve_project_registry
 from automation_assignments import apply_assignment_operator_action, iso, now_utc, repair_assignment_plan_path, set_plan_block_state
 
+from mem0 import MemoryClient
+
+MEM0_API_KEY = os.environ.get("MEM0_API_KEY", "")
+mem0_client = MemoryClient(api_key=MEM0_API_KEY) if MEM0_API_KEY else None
+
 ROOT = Path(__file__).resolve().parents[2]
 REQUEST_JSON_MAX_BYTES = 2 * 1024 * 1024
 BOOTSTRAP_PATH = "docs/tasks/.taskmanager-bootstrap.json"
@@ -84,6 +89,9 @@ class RuntimeConfigHandler(SimpleHTTPRequestHandler):
     if request_path == "api/automation/summary":
       self._handle_automation_summary()
       return
+    if request_path == "api/memory/list":
+      self._handle_memory_list()
+      return
     if request_path == "data/runtime/projects.json" or (request_path.startswith("data/runtime/config/") and request_path.endswith(".json")):
       self._handle_read_runtime_json_file(request_path, include_body=True)
       return
@@ -110,6 +118,14 @@ class RuntimeConfigHandler(SimpleHTTPRequestHandler):
       self._handle_write_runtime_config_file(request_path)
       return
     self.send_error(404, "Writable path not found")
+
+  def do_DELETE(self) -> None:  # noqa: N802 - stdlib hook name
+    parsed = urlparse(self.path)
+    request_path = unquote(parsed.path).lstrip("/")
+    if request_path.startswith("api/memory/") and request_path != "api/memory/":
+      self._handle_memory_delete()
+      return
+    self.send_error(404, "Delete endpoint not found")
 
   def _runtime_json_paths(self, request_path: str) -> tuple[Path, Path]:
     active_runtime_root = self.runtime_config.parent.resolve()
@@ -191,6 +207,66 @@ class RuntimeConfigHandler(SimpleHTTPRequestHandler):
     except Exception as error:  # noqa: BLE001
       self._send_json(400, {"ok": False, "error": str(error)})
 
+
+  def _handle_memory_add(self) -> None:
+    try:
+      if not mem0_client:
+        raise ValueError("MEM0_API_KEY environment variable is not set. Mem0 memory endpoints are disabled.")
+      body = self._read_json()
+      messages = body.get("messages", "")
+      user_id = body.get("user_id", "default")
+      metadata = body.get("metadata", {})
+      agent_id = body.get("agent_id", "task-manager")
+      result = mem0_client.add(messages, user_id=user_id, metadata=metadata, agent_id=agent_id)
+      self._send_json(200, {"ok": True, "results": result})
+    except Exception as error:  # noqa: BLE001
+      self._send_json(400, {"ok": False, "error": str(error)})
+
+  def _handle_memory_search(self) -> None:
+    try:
+      if not mem0_client:
+        raise ValueError("MEM0_API_KEY environment variable is not set. Mem0 memory endpoints are disabled.")
+      body = self._read_json()
+      query = body.get("query", "")
+      user_id = body.get("user_id", "default")
+      limit = body.get("limit", 10)
+      results = mem0_client.search(query, filters={"user_id": user_id}, limit=limit)
+      self._send_json(200, {"ok": True, "results": results})
+    except Exception as error:  # noqa: BLE001
+      self._send_json(400, {"ok": False, "error": str(error)})
+
+  def _handle_memory_list(self) -> None:
+    try:
+      if not mem0_client:
+        raise ValueError("MEM0_API_KEY environment variable is not set. Mem0 memory endpoints are disabled.")
+      parsed = urlparse(self.path)
+      query_parts = parsed.query.split("&")
+      user_id = "default"
+      limit = 50
+      for part in query_parts:
+        if not part:
+          continue
+        key, _, value = part.partition("=")
+        if key == "user_id":
+          user_id = value
+        elif key == "limit":
+          limit = int(value)
+      results = mem0_client.get_all(filters={"user_id": user_id}, limit=limit)
+      self._send_json(200, {"ok": True, "results": results})
+    except Exception as error:  # noqa: BLE001
+      self._send_json(400, {"ok": False, "error": str(error)})
+
+  def _handle_memory_delete(self) -> None:
+    try:
+      if not mem0_client:
+        raise ValueError("MEM0_API_KEY environment variable is not set. Mem0 memory endpoints are disabled.")
+      parsed = urlparse(self.path)
+      memory_id = unquote(parsed.path).lstrip("/").split("/")[-1]
+      mem0_client.delete(memory_id)
+      self._send_json(200, {"ok": True})
+    except Exception as error:  # noqa: BLE001
+      self._send_json(400, {"ok": False, "error": str(error)})
+
   def do_POST(self) -> None:  # noqa: N802 - stdlib hook name
     parsed = urlparse(self.path)
     request_path = unquote(parsed.path).lstrip("/")
@@ -203,6 +279,8 @@ class RuntimeConfigHandler(SimpleHTTPRequestHandler):
       "api/files/copy-verify-delete": self._handle_copy_verify_delete,
       "api/folders/copy-verify-delete": self._handle_copy_verify_delete_folder,
       "api/system/select-directory": self._handle_select_directory,
+      "api/memory/add": self._handle_memory_add,
+      "api/memory/search": self._handle_memory_search,
     }
     handler = handlers.get(request_path)
     if not handler:
